@@ -9,13 +9,14 @@ axios.defaults.baseURL = location.href.includes('asse.app.shebao.info')?'http://
 Vue.prototype.axios = axios
 
 //使用Vux
-import {Alert,XHeader,XInput,XButton,XDialog } from 'vux'
+import {Alert,XHeader,XInput,XButton,XDialog,Radio } from 'vux'
 
 Vue.component('alert',Alert)
 Vue.component('x-header',XHeader)
 Vue.component('x-input',XInput)
 Vue.component('x-button', XButton)
 Vue.component('x-dialog', XDialog)
+Vue.component('radio', Radio)
 
 
 Vue.config.productionTip = false
