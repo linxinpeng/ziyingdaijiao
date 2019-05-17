@@ -7,7 +7,7 @@
                     <h3>充值金额（元）</h3>
                     <div class="h-money">
                         <span>￥</span>
-                        <input type="text" placeholder="请输入充值金额" />
+                        <input type="text" placeholder="请输入充值金额" v-model="money" @input="money = NumberCheck(money)"/>
                         <div class="clearfix"></div>
                     </div>
                     <p>账户余额：0元</p>
@@ -18,15 +18,16 @@
                 <div class="p-type" v-for="item in payMethod" :key="item.key">
                     <img :src="item.icon" />
                     <span class="t-s1">{{item.value}}</span>
-                    <span class="t-s2">
-                        <img v-show="true" src="../assets/image/选择未选@2x.png" />
-                        <img v-show="false" src="../assets/image/可行@2x.png" />
+                    <span class="t-s2" @click="onChoose(item.key)">
+                        <img v-show="choose != item.key " src="../assets/image/选择未选@2x.png" />
+                        <img v-show="choose == item.key" src="../assets/image/可行@2x.png" />
                     </span>
                 </div>
             </div>
-            <div class="b-btn">
+            <div class="b-btn" @click="onSubmit">
                 确认充值
             </div>
+            <toast v-model="showMoney" type="text" :time="800" is-show-mask :text="showTitle" position="top"></toast>
         </div>
     </div>
 </template>
@@ -37,18 +38,62 @@ export default {
             choose: 0,
             payMethod: [{
                 icon: require('../assets/image/微信支付@2x.png'),
-                key: '001',
+                key: 'wx',
                 value: '微信支付(免手续费)'
             }, {
                 icon: require('../assets/image/支付宝支付@2x.png'),
-                key: '002',
+                key: 'zub',
                 value: '支付宝支付(免手续费)'
-            }]
+            }],
+            money: '',
+            showMoney: false,
+            showTitle:"请输入充值金额"
         }
     },
     methods:{
-        change(){
+        //验证金额只能输入整数或者保留两位小数
+         NumberCheck(num) {
+            var str = num;
+            var len1 = str.substr(0, 1);
+            var len2 = str.substr(1, 1);
+            //如果第一位是0，第二位不是点，就用数字把点替换掉
+            if (str.length > 1 && len1 == 0 && len2 != ".") {
+                str = str.substr(1, 1);
+            }
+            //第一位不能是.
+            if (len1 == ".") {
+                str = "";
+            }
+            //限制只能输入一个小数点
+            if (str.indexOf(".") != -1) {
+                var str_ = str.substr(str.indexOf(".") + 1);
+                if (str_.indexOf(".") != -1) {
+                str = str.substr(0, str.indexOf(".") + str_.indexOf(".") + 1);
+                }
+            }
+            //正则替换，保留数字和小数点
+            str = str.replace(/[^\d^\.]+/g,'')
+            //如果需要保留小数点后两位，则用下面公式
+            str = str.replace(/\.\d{3}$/,'')
+            return str;
+         },
+        //确认充值
+        onSubmit(){
+            if(!this.money.trim()){
+                this.showMoney = true;
+                return
+            }
+            if(this.choose == 0){
+                this.showMoney = true;
+                this.showTitle = "请选择支付方式";
+                return
+            }
 
+            console.log('doSomething....')
+        },
+        //选择支付方式
+        onChoose(key){
+            this.choose = key;
         }
     }
 }
@@ -69,7 +114,7 @@ export default {
                     h3{
                         font-size: .18rem;
                         color: #333333;
-                        margin-bottom: .15rem;
+                        margin-bottom: .16rem;
                         padding-top: .12rem;
                     }
                     .h-money{
@@ -146,13 +191,16 @@ export default {
             }
             .b-btn{
                 width: calc(100% - .35rem);
-                margin: .3rem auto;
+                margin: .4rem auto;
                 text-align: center;
                 padding: .15rem 0;
                 background-color: #c4ccdc;
                 color: #ffffff;
                 font-size: .16rem;
                 border-radius: 50px;
+            }
+            .b-btn:hover{
+                background-color: #4999ff;
             }
         }
     }

@@ -18,6 +18,7 @@
       </div>
     </div>
     <alert v-model="isShow" title="提示" > 请先同意《用户注册协议》和《隐私政策》</alert>
+    <toast v-model="show" type="text" :time="800" is-show-mask :text="msg" position="top"></toast>
   </div>
 </template>
 
@@ -34,12 +35,23 @@ export default {
       phone: '',
       VCode: '',
       isCheck: false,
-      isShow: false
+      isShow: false,
+      show:false,
+      msg:'请输入手机号'
     }
   },
   methods:{
     //发送验证码
     onSendCode(){
+      if(!this.phone.trim()){
+        this.show = true;
+        return
+      }
+      if(!/^1[3|4|7|8]\d{9}/.test(this.phone)){
+          this.show = true;
+          this.msg = '请输入正确的手机号码';
+          return
+      }
       this.isSend = true;
       let timer = setInterval(()=>{
         this.time --
@@ -51,6 +63,15 @@ export default {
     },
     //登录
     onLogin(){
+       if(!this.phone.trim()){
+        this.show = true;
+        return
+      }
+       if(!this.VCode.trim()){
+        this.show = true;
+        this.msg = "请输入验证码";
+        return
+      }
       if(!this.isCheck){
         this.isShow = true;
         return;

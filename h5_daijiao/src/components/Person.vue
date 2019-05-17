@@ -3,7 +3,7 @@
         <x-header :left-options="{backText: ''}" >个体工商户自缴社保</x-header>
         <div class="box" :style="`height:${winHieght}px`">
             <div class="b-header">
-                <img class="h-img" src="../assets/image/充值@3x.png"  @click="$router.push('/')"/>
+                <img class="h-img" src="../assets/image/充值@3x.png"  @click="$router.push('/chargemoney')"/>
                 <div class="h-info">
                     <img src="../assets/image/头像@3x.png" />
                     <div class="i-info">
@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="h-momey">
-                    <div class="m-left">
+                    <div class="m-left" @click="$router.push('/balance')">
                         <p>账户余额（元）</p>
                         <strong>0.00</strong>
                     </div>
@@ -33,7 +33,7 @@
             </div>
             <div class="b-content">
                 <ul>
-                    <li @click="$router.push('/')">
+                    <li @click="$router.push('/Certification')">
                         <span class="c-s1"><img src="../assets/image/lb_认证中心@2x.png" /></span>
                         <span class="c-s2">商户资质认证中心</span>
                         <span class="c-s3">未认证<img src="../assets/image/jinru@2x.png" /></span>
